@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import reactLogo from '@assets/react.svg'
 import HomeStyle from './index.module.scss'
 import { useNavigate } from 'react-router-dom'
 

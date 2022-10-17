@@ -1,13 +1,44 @@
 import React from 'react'
 import MyRoutes from '@/router'
-import { useVcosole } from './hooks/useVconsole'
-// 这个是全局的页面 还可以做一些其他的操作
+import { Layout, Menu } from 'antd'
+import { useNavigate } from 'react-router-dom'
 
-export default function App() {
-  useVcosole()
+import './App.css'
+
+const { Header, Content } = Layout
+
+const App: React.FC = () => {
+  const navigate = useNavigate()
+  const goHomePage = () => {
+    navigate('/')
+  }
+  const goTriggerPage = () => {
+    navigate('/trigger')
+  }
+  const goAboutPage = () => {
+    navigate('/about')
+  }
   return (
-    <div>
-      <MyRoutes />
-    </div>
+    <Layout className="layout">
+      <Header className="layout-header">
+        <div className="logo" />
+        <Menu
+          style={{ backgroundColor: 'transparent', borderBottom: '1px solid transparent', color: '#fff' }}
+          mode="horizontal"
+        >
+          <Menu.Item onClick={goHomePage}>Home</Menu.Item>
+          <Menu.Item onClick={goTriggerPage}>Trigger</Menu.Item>
+          <Menu.Item onClick={goAboutPage}>About</Menu.Item>
+
+        </Menu>
+      </Header>
+      <Content>
+        <div className="site-layout-content">
+          <MyRoutes />
+        </div>
+      </Content>
+    </Layout>
   )
 }
+
+export default App

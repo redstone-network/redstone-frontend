@@ -1,13 +1,18 @@
+import { Tabs } from 'antd'
 import React from 'react'
 
-function About() {
-  const [pageTitle] = useState('关于页面') //因为加入了unplugin-auto-import 所以不用在手动导入
-
-  return (
-    <div>
-      <h1>{pageTitle}</h1>
-    </div>
-  )
-}
+const About: React.FC = () => (
+  <Tabs defaultActiveKey="1">
+    <Tabs.TabPane tab="Tab 1" key="1">
+      Content of Tab Pane 1
+    </Tabs.TabPane>
+    <Tabs.TabPane tab="Tab 2" key="2">
+      Content of Tab Pane 2
+    </Tabs.TabPane>
+    <Tabs.TabPane tab="Tab 3" key="3">
+      Content of Tab Pane 3
+    </Tabs.TabPane>
+  </Tabs>
+)
 
 export default About

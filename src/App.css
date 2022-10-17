@@ -1,0 +1,25 @@
+.layout {
+  background: url(@/assets/gb.png) no-repeat #7761ff;
+  height: 100vh;
+}
+.layout-header {
+  background: rgba(33,27,47,.4);
+  backdrop-filter: blur(30px);
+  border-bottom: 0px solid #e7e7e7;
+  transition: background-color ease .3s;
+}
+.site-layout-content {
+  min-height: 280px;
+  padding: 24px;
+}
+#components-layout-demo-top .logo {
+  float: left;
+  width: 120px;
+  height: 31px;
+  margin: 16px 24px 16px 0;
+  background: rgba(255, 255, 255, 0.3);
+}
+.ant-row-rtl #components-layout-demo-top .logo {
+  float: right;
+  margin: 16px 0 16px 24px;
+}
