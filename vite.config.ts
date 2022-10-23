@@ -33,6 +33,7 @@ export default ({ command, mode }: ConfigEnv) => {
         '@store': resolve(__dirname, './src/store'),
         '@views': resolve(__dirname, './src/views'),
         '@assets': resolve(__dirname, './src/assets'),
+        '@styles': resolve(__dirname, './src/styles'),
         '@hooks': resolve(__dirname, './src/hooks'),
       },
     },
@@ -52,6 +53,9 @@ export default ({ command, mode }: ConfigEnv) => {
       // css预处理器
       preprocessorOptions: {
         sass: {
+          javascriptEnabled: true,
+        },
+        less: {
           javascriptEnabled: true,
         },
       },
