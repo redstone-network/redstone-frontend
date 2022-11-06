@@ -7,7 +7,6 @@ import './NavBar.less'
 export default function NavBar() {
   const items: MenuProps['items'] = [
     { label: 'HOME', key: '/' },
-    { label: 'TRIGGER', key: '/Trigger' },
     { label: 'CONFIG', key: '/Config' },
   ]
   const navigate = useNavigate()

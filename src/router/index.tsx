@@ -59,16 +59,6 @@ export default function App() {
           ],
         },
       ],
-    },
-    {
-      path: '/Trigger',
-      element: <LayoutIndex />,
-      children: [
-        {
-          index: true,
-          element: <Trigger />,
-        },
-      ],
-    },
+    }
   ])
 }
