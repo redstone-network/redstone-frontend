@@ -1,18 +1,24 @@
-import { Button, Select, Form, Input } from 'antd'
-import React from 'react'
+import { Button, Form, Input } from 'antd'
+import React, { useState } from 'react'
+import { setMail } from '@/substrate'
 
-const { Option } = Select
 const App: React.FC = () => {
-  const onFinish = (values: any) => {
-    console.log('Success:', values)
+  const [loading, setLoading] = useState<boolean>(false)
+  const [Disabled, setDisabled] = useState<boolean>(false)
+  const [btnText, setBtnText] = useState<string>('Submit')
+
+  const onFinish = async (values: any) => {
+    const { receiver, title, body } = values
+    setBtnText('Loading')
+    setLoading(true)
+    setDisabled(true)
+    const res = await setMail(receiver, title, body)
+    if (res) {
+      setLoading(false)
+      setDisabled(false)
+    }
   }
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo)
-  }
-  const handleChange = (value: string) => {
-    console.log(`selected ${value}`)
-  }
   return (
     <div className="form-box">
       <div className="form-header">mail config</div>
@@ -22,10 +28,14 @@ const App: React.FC = () => {
         wrapperCol={{ span: 16 }}
         initialValues={{ remember: true }}
         onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
+        disabled={Disabled}
         autoComplete="off"
       >
-        <Form.Item label="mail receive" name="amount" rules={[{ required: true, message: 'Please input your mail!' }]}>
+        <Form.Item
+          label="mail receive"
+          name="receiver"
+          rules={[{ required: true, message: 'Please input your mail!' }]}
+        >
           <Input placeholder="Please input your mail" />
         </Form.Item>
         <Form.Item label="title" name="title">
@@ -36,8 +46,8 @@ const App: React.FC = () => {
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit">
-            Submit
+          <Button loading={loading} type="primary" htmlType="submit">
+            {btnText}
           </Button>
         </Form.Item>
       </Form>

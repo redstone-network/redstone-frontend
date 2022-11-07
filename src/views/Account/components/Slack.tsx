@@ -1,18 +1,24 @@
-import { Button, Select, Form, Input } from 'antd'
+import { Button, Form, Input } from 'antd'
 import React from 'react'
+import { setSlack } from '@/substrate'
 
-const { Option } = Select
 const App: React.FC = () => {
-  const onFinish = (values: any) => {
-    console.log('Success:', values)
+  const [loading, setLoading] = useState<boolean>(false)
+  const [Disabled, setDisabled] = useState<boolean>(false)
+  const [btnText, setBtnText] = useState<string>('Submit')
+
+  const onFinish = async (values: any) => {
+    const { hook_url, message } = values
+    setBtnText('Loading')
+    setLoading(true)
+    setDisabled(true)
+    const res = await setSlack(hook_url, message)
+    if (res) {
+      setLoading(false)
+      setDisabled(false)
+    }
   }
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo)
-  }
-  const handleChange = (value: string) => {
-    console.log(`selected ${value}`)
-  }
   return (
     <div className="form-box">
       <div className="form-header">slack config</div>
@@ -22,23 +28,24 @@ const App: React.FC = () => {
         wrapperCol={{ span: 16 }}
         initialValues={{ remember: true }}
         onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
+        disabled={Disabled}
         autoComplete="off"
       >
         <Form.Item
           label="slack hook url"
-          name="amount"
+          name="hook_url"
           rules={[{ required: true, message: 'Please input slack hook url!' }]}
         >
           <Input placeholder="Please input your slack hook url!" />
         </Form.Item>
 
-        <Form.Item label="info" name="amount" rules={[{ required: true, message: 'Please input info!' }]}>
+        <Form.Item label="info" name="message" rules={[{ required: true, message: 'Please input info!' }]}>
           <Input placeholder="Please input info!" />
         </Form.Item>
+
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit">
-            Submit
+          <Button loading={loading} type="primary" htmlType="submit">
+            {btnText}
           </Button>
         </Form.Item>
       </Form>

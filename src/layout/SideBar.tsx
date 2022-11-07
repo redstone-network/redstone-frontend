@@ -9,8 +9,8 @@ const { Content, Sider } = Layout
 
 const SideBar: React.FC = () => {
   const items: MenuProps['items'] = [
-    { label: 'LIMIT CONFIG', key: '/Config/Limit' },
     { label: 'ACCOUNT CONFIG', key: '/Config/Account' },
+    { label: 'LIMIT CONFIG', key: '/Config/Limit' },
     { label: 'FREE CONFIG', key: '/Config/Free' },
     { label: 'PERMISSION CONFIG', key: '/Config/Permission' },
     { label: 'APPROVEL', key: '/Config/Approvel' },

@@ -1,18 +1,28 @@
-import { Button, Select, Form, Input } from 'antd'
-import React from 'react'
+import { Button, Form, Input, message } from 'antd'
+import React, { useState, useCallback } from 'react'
+import { setDiscord } from '@/substrate'
 
-const { Option } = Select
 const App: React.FC = () => {
-  const onFinish = (values: any) => {
-    console.log('Success:', values)
-  }
+  const [loading, setLoading] = useState<boolean>(false)
+  const [Disabled, setDisabled] = useState<boolean>(false)
+  const [btnText, setBtnText] = useState<string>('Submit')
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo)
+  const onFinish = async (values: any) => {
+    const { hook_url, user, content } = values
+    setBtnText('Loading')
+    setLoading(true)
+    setDisabled(true)
+    const res = await setDiscord(hook_url, user, content)
+    if (res) {
+      setLoading(false)
+      setDisabled(false)
+    }
   }
-  const handleChange = (value: string) => {
-    console.log(`selected ${value}`)
-  }
+  const onFinishFailed = useCallback(() => {
+    message.destroy()
+    message.info('place input the required fields')
+  }, [])
+
   return (
     <div className="form-box">
       <div className="form-header">discord config</div>
@@ -23,22 +33,28 @@ const App: React.FC = () => {
         initialValues={{ remember: true }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
+        disabled={Disabled}
         autoComplete="off"
       >
         <Form.Item
           label="discord hook url"
-          name="amount"
+          name="hook_url"
           rules={[{ required: true, message: 'Please input discord hook url!' }]}
         >
           <Input placeholder="Please input your discord hook url!" />
         </Form.Item>
 
-        <Form.Item label="info" name="amount" rules={[{ required: true, message: 'Please input info!' }]}>
-          <Input placeholder="Please input info!" />
+        <Form.Item label="user" name="user" rules={[{ required: true, message: 'Please input user!' }]}>
+          <Input placeholder="Please input user!" />
         </Form.Item>
+
+        <Form.Item label="content" name="content" rules={[{ required: true, message: 'Please input content!' }]}>
+          <Input placeholder="Please input content!" />
+        </Form.Item>
+
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit">
-            Submit
+          <Button loading={loading} type="primary" htmlType="submit">
+            {btnText}
           </Button>
         </Form.Item>
       </Form>
