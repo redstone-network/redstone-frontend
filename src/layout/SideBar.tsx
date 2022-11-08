@@ -25,7 +25,7 @@ const SideBar: React.FC = () => {
       <Sider>
         <Menu onClick={itemHandler} items={items} className="content"></Menu>
       </Sider>
-      <Content>
+      <Content className="content-body">
         <Outlet />
       </Content>
     </Layout>

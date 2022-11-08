@@ -1,21 +1,43 @@
 import { Button, Form, Input } from 'antd'
-import React, { useState } from 'react'
-import { setMail } from '@/substrate'
+import React, { useState, useEffect } from 'react'
+import { setMail, getAccountInfo } from '@/substrate'
+import { AccountType } from '@/substrate/enum'
 
 const App: React.FC = () => {
+  const [form] = Form.useForm()
   const [loading, setLoading] = useState<boolean>(false)
   const [Disabled, setDisabled] = useState<boolean>(false)
   const [btnText, setBtnText] = useState<string>('Submit')
 
+  async function getInfo() {
+    try {
+      const { MailWithToken } = await getAccountInfo(AccountType.Mail)
+      const [, , receiver, title, body] = MailWithToken
+      form.setFieldsValue({
+        receiver,
+        title,
+        body,
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  useEffect(() => {
+    getInfo()
+  }, [])
   const onFinish = async (values: any) => {
-    const { receiver, title, body } = values
-    setBtnText('Loading')
-    setLoading(true)
-    setDisabled(true)
-    const res = await setMail(receiver, title, body)
-    if (res) {
-      setLoading(false)
-      setDisabled(false)
+    try {
+      const { receiver, title, body } = values
+      setBtnText('Loading')
+      setLoading(true)
+      setDisabled(true)
+      const res = await setMail(receiver, title, body)
+      if (res) {
+        setLoading(false)
+        setDisabled(false)
+      }
+    } catch (err) {
+      console.log(err)
     }
   }
 
@@ -28,6 +50,7 @@ const App: React.FC = () => {
         wrapperCol={{ span: 16 }}
         initialValues={{ remember: true }}
         onFinish={onFinish}
+        form={form}
         disabled={Disabled}
         autoComplete="off"
       >

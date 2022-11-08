@@ -37,6 +37,7 @@ export default function App() {
               element: <Config />,
             },
             {
+              index: true,
               path: 'Limit',
               element: <Config />,
             },

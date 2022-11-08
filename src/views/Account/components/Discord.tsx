@@ -1,12 +1,30 @@
 import { Button, Form, Input, message } from 'antd'
 import React, { useState, useCallback } from 'react'
-import { setDiscord } from '@/substrate'
+import { getAccountInfo, setDiscord } from '@/substrate'
+import { AccountType } from '@/substrate/enum'
 
 const App: React.FC = () => {
+  const [form] = Form.useForm()
   const [loading, setLoading] = useState<boolean>(false)
   const [Disabled, setDisabled] = useState<boolean>(false)
   const [btnText, setBtnText] = useState<string>('Submit')
 
+  async function getInfo() {
+    try {
+      const { Discord } = await getAccountInfo(AccountType.Discord)
+      const [hook_url, user, content] = Discord
+      form.setFieldsValue({
+        hook_url,
+        user,
+        content,
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  useEffect(() => {
+    getInfo()
+  }, [])
   const onFinish = async (values: any) => {
     const { hook_url, user, content } = values
     setBtnText('Loading')
@@ -32,6 +50,7 @@ const App: React.FC = () => {
         wrapperCol={{ span: 16 }}
         initialValues={{ remember: true }}
         onFinish={onFinish}
+        form={form}
         onFinishFailed={onFinishFailed}
         disabled={Disabled}
         autoComplete="off"

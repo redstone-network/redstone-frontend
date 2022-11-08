@@ -1,11 +1,7 @@
 import { ApiPromise, WsProvider } from '@polkadot/api'
 import { Keyring } from '@polkadot/keyring'
-import dayjs from 'dayjs'
-
-interface Res {
-  events: any[]
-  status: string
-}
+// import dayjs from 'dayjs'
+import { AccountType } from './enum'
 
 // Construct
 const wsProvider = new WsProvider('ws://127.0.0.1:9944')
@@ -23,7 +19,7 @@ function getUser(userName: string) {
   return user
 }
 const Alice = getUser('Alice')
-console.log(Alice.address)
+console.log(Alice)
 
 async function getChainInfo() {
   // 1. 查看本条链的信息
@@ -46,7 +42,6 @@ async function getChainInfo() {
 async function setMail(receiver: string, title: string, body: string) {
   return new Promise((resolve) => {
     api.tx.notification.setMail(receiver, title, body).signAndSend(Alice, ({ events = [], status }) => {
-      console.log(111)
       if (status.isFinalized) {
         resolve({ events, status })
         events.forEach(({ phase, event: { data, method, section } }) => {
@@ -56,13 +51,14 @@ async function setMail(receiver: string, title: string, body: string) {
     })
   })
 }
+
 // setDiscord
 async function setSlack(hook_url: string, message: string) {
   return new Promise((resolve) => {
     api.tx.notification.setSlack(hook_url, message).signAndSend(Alice, ({ events = [], status }) => {
       console.log(222)
       if (status.isFinalized) {
-        resolve({ events, status })
+        resolve(true)
         events.forEach(({ phase, event: { data, method, section } }) => {
           console.log(`${phase.toString()} : ${section}.${method} ${data.toString()}`)
         })
@@ -84,4 +80,9 @@ async function setDiscord(hook_url: string, user: string, content: string): Prom
     })
   })
 }
-export { getHex, setMail, setSlack, setDiscord, getChainInfo }
+// getInfo
+async function getAccountInfo(index: AccountType) {
+  const res = await api.query.notification.mapNofityAction(Alice.address, index)
+  return res.toHuman()
+}
+export { getHex, setMail, setSlack, setDiscord, getChainInfo, getAccountInfo }

@@ -1,8 +1,10 @@
 import { Button, Form, Input } from 'antd'
 import React from 'react'
-import { setSlack } from '@/substrate'
+import { getAccountInfo, setSlack } from '@/substrate'
+import { AccountType } from '@/substrate/enum'
 
 const App: React.FC = () => {
+  const [form] = Form.useForm()
   const [loading, setLoading] = useState<boolean>(false)
   const [Disabled, setDisabled] = useState<boolean>(false)
   const [btnText, setBtnText] = useState<string>('Submit')
@@ -18,7 +20,21 @@ const App: React.FC = () => {
       setDisabled(false)
     }
   }
-
+  async function getInfo() {
+    try {
+      const { Slack } = await getAccountInfo(AccountType.Slack)
+      const [hook_url, message] = Slack
+      form.setFieldsValue({
+        hook_url,
+        message,
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  useEffect(() => {
+    getInfo()
+  }, [])
   return (
     <div className="form-box">
       <div className="form-header">slack config</div>
@@ -28,6 +44,7 @@ const App: React.FC = () => {
         wrapperCol={{ span: 16 }}
         initialValues={{ remember: true }}
         onFinish={onFinish}
+        form={form}
         disabled={Disabled}
         autoComplete="off"
       >
