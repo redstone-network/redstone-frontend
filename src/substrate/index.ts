@@ -85,4 +85,35 @@ async function getAccountInfo(index: AccountType) {
   const res = await api.query.notification.mapNofityAction(Alice.address, index)
   return res.toHuman()
 }
-export { getHex, setMail, setSlack, setDiscord, getChainInfo, getAccountInfo }
+// set amount limit
+async function setAmountLimit(time: number, amount: number): Promise<boolean> {
+  return new Promise((resolve) => {
+    api.tx.defenseModule
+      .setTransferLimit({ amountLimit: [time, amount] })
+      .signAndSend(Alice, ({ events = [], status }) => {
+        if (status.isFinalized) {
+          resolve(true)
+          events.forEach(({ phase, event: { data, method, section } }) => {
+            console.log(`${phase.toString()} : ${section}.${method} ${data.toString()}`)
+          })
+        }
+      })
+  })
+}
+// set the timesLimit
+async function setTimesLimit(time: number, amount: number): Promise<boolean> {
+  return new Promise((resolve) => {
+    api.tx.defenseModule
+      .setTransferLimit({ timesLimit: [time, amount] })
+      .signAndSend(Alice, ({ events = [], status }) => {
+        if (status.isFinalized) {
+          console.log(status)
+          resolve(true)
+          events.forEach(({ phase, event: { data, method, section } }) => {
+            console.log(`${phase.toString()} : ${section}.${method} ${data.toString()}`)
+          })
+        }
+      })
+  })
+}
+export { getHex, setMail, setSlack, setDiscord, getChainInfo, getAccountInfo, setAmountLimit, setTimesLimit }

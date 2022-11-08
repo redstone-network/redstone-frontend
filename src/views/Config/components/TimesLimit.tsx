@@ -1,17 +1,30 @@
-import { Button, Select, Form, Input } from 'antd'
+import { setTimesLimit } from '@/substrate'
+import { Button, Select, Form, Input, message } from 'antd'
 import React from 'react'
 
 const { Option } = Select
+
 const App: React.FC = () => {
-  const onFinish = (values: any) => {
-    console.log('Success:', values)
+  const [btnText, setBtnText] = useState('Submit')
+
+  const onFinish = async (values: any) => {
+    try {
+      const { amount } = values
+      const time = new Date().getTime()
+      setBtnText('Loading')
+      const res = await setTimesLimit(time, amount)
+      console.log(res)
+      if (res) {
+        setBtnText('Edit')
+        message.info('set amount limit successfully!')
+      }
+    } catch (err) {
+      message.error('Error!')
+    }
   }
 
   const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo)
-  }
-  const handleChange = (value: string) => {
-    console.log(`selected ${value}`)
+    message.error('please input the required fields!')
   }
   return (
     <div className="form-box">
@@ -38,7 +51,7 @@ const App: React.FC = () => {
           label="alarm way"
           rules={[{ required: true, message: 'Please select a alarm way !' }]}
         >
-          <Select placeholder="Select a alarm way" allowClear onChange={handleChange}>
+          <Select placeholder="Select a alarm way" allowClear>
             <Option value="male">male</Option>
             <Option value="female">slack</Option>
             <Option value="other">discord</Option>
@@ -47,7 +60,7 @@ const App: React.FC = () => {
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
           <Button type="primary" htmlType="submit">
-            Submit
+            {btnText}
           </Button>
         </Form.Item>
       </Form>

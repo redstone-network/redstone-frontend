@@ -3,7 +3,7 @@ import './index.less'
 import { Card } from 'antd'
 
 import AmountLimit from './components/AmountLimit'
-import HundredLimit from './components/HundredLimit'
+import HundredLimit from './components/TimesLimit'
 
 const Config: React.FC = () => {
   return (
