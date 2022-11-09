@@ -1,17 +1,33 @@
-import { Button, Select, Form, Input } from 'antd'
-import React from 'react'
+import { Button, Form, InputNumber, message } from 'antd'
+import React, { useState } from 'react'
+import { setFreezeTime, doFreeze } from '@/substrate'
 
-const { Option } = Select
 const App: React.FC = () => {
-  const onFinish = (values: any) => {
-    console.log('Success:', values)
+  const freeText = 'freeze current account'
+  const [btnText, setBtnText] = useState('freeText')
+  const [disabled, setDisabled] = useState(false)
+
+  const onFinish = async (values: any) => {
+    try {
+      const { seconds } = values
+      const time = new Date().getTime()
+      setDisabled(true)
+      setBtnText('freezing...')
+      const setRes = await setFreezeTime(time, seconds)
+      if (setRes) {
+        await doFreeze(true)
+        setBtnText(freeText)
+        setDisabled(false)
+        return
+      }
+      message.error('Error!')
+    } catch (error) {
+      message.error('Error!')
+    }
   }
 
   const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo)
-  }
-  const handleChange = (value: string) => {
-    console.log(`selected ${value}`)
+    message.error('place input the required fields!')
   }
   return (
     <div className="form-box">
@@ -20,24 +36,22 @@ const App: React.FC = () => {
         name="basic"
         labelCol={{ span: 4 }}
         wrapperCol={{ span: 16 }}
+        disabled={disabled}
         initialValues={{ remember: true }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
-        <Form.Item label="free time" name="amount" rules={[{ required: true, message: 'Please input free time!' }]}>
-          <Input placeholder="Please input free time" />
-        </Form.Item>
-        <Form.Item label="title" name="title">
-          <Input placeholder="Please input your title" />
-        </Form.Item>
-        <Form.Item label="body" name="body">
-          <Input placeholder="Please input your body" />
+        <Form.Item label="free time">
+          <Form.Item name="seconds" rules={[{ required: true, message: 'Please input free time!' }]} noStyle>
+            <InputNumber min={1} />
+          </Form.Item>
+          <span className="ant-form-text"> second</span>
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
           <Button type="primary" htmlType="submit">
-            freeze current account
+            {btnText}
           </Button>
         </Form.Item>
       </Form>

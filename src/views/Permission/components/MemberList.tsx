@@ -1,6 +1,7 @@
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import { Button, Form, Input } from 'antd'
-import React from 'react'
+import { Button, Form, Input, InputNumber, message } from 'antd'
+import React, { useState } from 'react'
+import { createCaptureConfig } from '@/substrate'
 
 const formItemLayout = {
   labelCol: {
@@ -8,7 +9,7 @@ const formItemLayout = {
     sm: { span: 4 },
   },
   wrapperCol: {
-    xs: { span: 24 },
+    xs: { span: 20 },
     sm: { span: 20 },
   },
 }
@@ -20,21 +21,43 @@ const formItemLayoutWithOutLabel = {
 }
 
 const App: React.FC = () => {
-  const onFinish = (values: any) => {
-    console.log('Received values of form:', values)
+  const [btnText, setBtnText] = useState('Submit')
+  const [disabled, setDisabled] = useState(false)
+
+  const onFinish = async (values: any) => {
+    try {
+      const { names, Threshold } = values
+      setDisabled(true)
+      setBtnText('Loading...')
+      const res = await createCaptureConfig(names, Threshold)
+      if (res) {
+        message.info('Successful!')
+      }
+    } catch (err) {
+      console.log(err)
+      message.error('Error!')
+    }
+    setDisabled(false)
+    setBtnText('Submit')
   }
 
   return (
     <div className="form-box">
       <div className="form-header">set account permission memberList</div>
-      <Form name="dynamic_form_item" {...formItemLayoutWithOutLabel} onFinish={onFinish}>
+      <Form
+        name="dynamic_form_item"
+        disabled={disabled}
+        labelWrap={true}
+        {...formItemLayoutWithOutLabel}
+        onFinish={onFinish}
+      >
         <Form.List
           name="names"
           rules={[
             {
               validator: async (_, names) => {
                 if (!names || names.length < 2) {
-                  return Promise.reject(new Error('At least 2 passengers'))
+                  return Promise.reject(new Error('At least 2 number'))
                 }
               },
             },
@@ -56,12 +79,12 @@ const App: React.FC = () => {
                       {
                         required: true,
                         whitespace: true,
-                        message: "Please input passenger's name or delete this field.",
+                        message: 'Please input permissions',
                       },
                     ]}
                     noStyle
                   >
-                    <Input placeholder="passenger name" style={{ width: '60%' }} />
+                    <Input placeholder="permissions" style={{ width: '60%', marginRight: '10px' }} />
                   </Form.Item>
                   {fields.length > 1 ? (
                     <MinusCircleOutlined className="dynamic-delete-button" onClick={() => remove(field.name)} />
@@ -77,9 +100,17 @@ const App: React.FC = () => {
             </>
           )}
         </Form.List>
+        <Form.Item
+          {...formItemLayout}
+          rules={[{ required: true, message: 'Please input Threshold' }]}
+          name="Threshold"
+          label="Threshold"
+        >
+          <InputNumber style={{ width: '60%', marginRight: '10px' }} />
+        </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            Submit
+            {btnText}
           </Button>
         </Form.Item>
       </Form>

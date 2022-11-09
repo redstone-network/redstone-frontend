@@ -116,4 +116,113 @@ async function setTimesLimit(time: number, amount: number): Promise<boolean> {
       })
   })
 }
-export { getHex, setMail, setSlack, setDiscord, getChainInfo, getAccountInfo, setAmountLimit, setTimesLimit }
+// setFreezeTime
+async function setFreezeTime(time: number, seconds: number): Promise<boolean> {
+  return new Promise((resolve) => {
+    api.tx.defenseModule
+      .setRiskManagement({ timeFreeze: [time, seconds] })
+      .signAndSend(Alice, ({ events = [], status }) => {
+        if (status.isFinalized) {
+          console.log(status)
+          resolve(true)
+          events.forEach(({ phase, event: { data, method, section } }) => {
+            console.log(`${phase.toString()} : ${section}.${method} ${data.toString()}`)
+          })
+        }
+      })
+  })
+}
+// freeze
+async function doFreeze(frozen: boolean): Promise<boolean> {
+  return new Promise((resolve) => {
+    api.tx.defenseModule.setRiskManagement({ accountFreeze: frozen }).signAndSend(Alice, ({ events = [], status }) => {
+      if (status.isFinalized) {
+        resolve(true)
+        events.forEach(({ phase, event: { data, method, section } }) => {
+          console.log(`${phase.toString()} : ${section}.${method} ${data.toString()}`)
+        })
+      }
+    })
+  })
+}
+// createCaptureConfig
+async function createCaptureConfig(list: string[], Threshold: number): Promise<boolean> {
+  return new Promise((resolve) => {
+    api.tx.permissionCapture.createCaptureConfig(list, Threshold).signAndSend(Alice, ({ events = [], status }) => {
+      if (status.isFinalized) {
+        resolve(true)
+        events.forEach(({ phase, event: { data, method, section } }) => {
+          console.log(`${phase.toString()} : ${section}.${method} ${data.toString()}`)
+        })
+      }
+    })
+  })
+}
+// createGetAccountPermissions
+async function createGetAccountPermissions(account: string): Promise<boolean> {
+  return new Promise((resolve) => {
+    api.tx.permissionCapture.createGetAccountPermissions(account).signAndSend(Alice, ({ events = [], status }) => {
+      if (status.isFinalized) {
+        resolve(true)
+        events.forEach(({ phase, event: { data, method, section } }) => {
+          console.log(`${phase.toString()} : ${section}.${method} ${data.toString()}`)
+        })
+      }
+    })
+  })
+}
+// freeze
+async function cancelGetAccountPermissions(account: string): Promise<boolean> {
+  return new Promise((resolve) => {
+    api.tx.permissionCapture.cancelGetAccountPermissions(account).signAndSend(Alice, ({ events = [], status }) => {
+      if (status.isFinalized) {
+        resolve(true)
+        events.forEach(({ phase, event: { data, method, section } }) => {
+          console.log(`${phase.toString()} : ${section}.${method} ${data.toString()}`)
+        })
+      }
+    })
+  })
+}
+// freeze
+async function vote(proposal_id: number, Vote: number): Promise<boolean> {
+  return new Promise((resolve) => {
+    api.tx.permissionCapture.vote(proposal_id, Vote).signAndSend(Alice, ({ events = [], status }) => {
+      if (status.isFinalized) {
+        resolve(true)
+        events.forEach(({ phase, event: { data, method, section } }) => {
+          console.log(`${phase.toString()} : ${section}.${method} ${data.toString()}`)
+        })
+      }
+    })
+  })
+}
+async function operationalVoting(hash: number, Vote: number): Promise<boolean> {
+  return new Promise((resolve) => {
+    api.tx.permissionCapture.operationalVoting(hash, Vote).signAndSend(Alice, ({ events = [], status }) => {
+      if (status.isFinalized) {
+        resolve(true)
+        events.forEach(({ phase, event: { data, method, section } }) => {
+          console.log(`${phase.toString()} : ${section}.${method} ${data.toString()}`)
+        })
+      }
+    })
+  })
+}
+export {
+  getHex,
+  setMail,
+  setSlack,
+  setDiscord,
+  getChainInfo,
+  getAccountInfo,
+  setAmountLimit,
+  setTimesLimit,
+  setFreezeTime,
+  doFreeze,
+  createCaptureConfig,
+  createGetAccountPermissions,
+  operationalVoting,
+  vote,
+  cancelGetAccountPermissions,
+}

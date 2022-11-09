@@ -1,17 +1,29 @@
-import { Button, Select, Form, Input } from 'antd'
+import { cancelGetAccountPermissions } from '@/substrate'
+import { Button, Form, Input, message } from 'antd'
 import React from 'react'
 
-const { Option } = Select
 const App: React.FC = () => {
-  const onFinish = (values: any) => {
-    console.log('Success:', values)
-  }
+  const [btnText, setBtnText] = useState('Submit')
+  const [disabled, setDisabled] = useState(false)
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo)
+  const onFinish = async (values: any) => {
+    try {
+      const { account } = values
+      setDisabled(true)
+      setBtnText('Loading...')
+      const res = await cancelGetAccountPermissions(account)
+      if (res) {
+        message.info('Successful!')
+      }
+    } catch (err) {
+      console.log(err)
+      message.error('Error!')
+    }
+    setDisabled(false)
+    setBtnText('Submit')
   }
-  const handleChange = (value: string) => {
-    console.log(`selected ${value}`)
+  const onFinishFailed = function () {
+    message.error('please input the required fields!')
   }
   return (
     <div className="form-box">
@@ -22,6 +34,7 @@ const App: React.FC = () => {
         wrapperCol={{ span: 16 }}
         initialValues={{ remember: true }}
         onFinish={onFinish}
+        disabled={disabled}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
@@ -31,7 +44,7 @@ const App: React.FC = () => {
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
           <Button type="primary" htmlType="submit">
-            Submit
+            {btnText}
           </Button>
         </Form.Item>
       </Form>

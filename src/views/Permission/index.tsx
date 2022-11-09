@@ -10,13 +10,13 @@ const Config: React.FC = () => {
   return (
     <>
       <Card>
+        <MemberList />
+      </Card>
+      <Card>
         <Account />
       </Card>
       <Card>
         <CancelAccount />
-      </Card>
-      <Card>
-        <MemberList />
       </Card>
     </>
   )

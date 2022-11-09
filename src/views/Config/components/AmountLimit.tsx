@@ -1,8 +1,6 @@
-import { Button, Select, Form, Input, message } from 'antd'
+import { Button, Form, Input, message } from 'antd'
 import React, { useState } from 'react'
 import { setAmountLimit } from '@/substrate'
-
-const { Option } = Select
 
 const App: React.FC = () => {
   const [btnText, setBtnText] = useState('Submit')
@@ -45,18 +43,6 @@ const App: React.FC = () => {
           rules={[{ required: true, message: 'Please input your amount per tx!' }]}
         >
           <Input placeholder="Please input your amount per tx!" />
-        </Form.Item>
-
-        <Form.Item
-          name="alarmWay"
-          label="alarm way"
-          rules={[{ required: true, message: 'Please select a alarm way !' }]}
-        >
-          <Select placeholder="Select a alarm way" allowClear>
-            <Option value="male">male</Option>
-            <Option value="female">slack</Option>
-            <Option value="other">discord</Option>
-          </Select>
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
