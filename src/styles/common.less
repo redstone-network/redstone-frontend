@@ -100,7 +100,7 @@
 .form-box {
   width: 90%;
   margin: 0 auto;
-  background: linear-gradient(90deg, rgba(67, 72, 254, 0.05), rgba(118, 67, 254, 0.03));
+  background: #f7f7f9;
   padding: 20px;
   box-sizing: border-box;
   overflow: hidden;
@@ -119,12 +119,13 @@
     z-index: -1;
     border-radius: 8px;
   }
+  box-shadow: 0px 4px 12px rgb(0 0 0 / 8%), 0px 1px 20px rgb(0 0 0 / 4%);
   .form-header {
     font-size: 24px;
     text-align: center;
     padding: 8px 0;
   }
-  .ant-input {
-    background: linear-gradient(90deg, rgba(67, 72, 254, 0.05), rgba(118, 67, 254, 0.03));
+  .ant-input, .ant-input-number, .ant-select {
+    background: #f7f7f9;
   }
 }

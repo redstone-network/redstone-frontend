@@ -171,7 +171,7 @@ async function createGetAccountPermissions(account: string): Promise<boolean> {
     })
   })
 }
-// freeze
+// cancelGetAccountPermissions
 async function cancelGetAccountPermissions(account: string): Promise<boolean> {
   return new Promise((resolve) => {
     api.tx.permissionCapture.cancelGetAccountPermissions(account).signAndSend(Alice, ({ events = [], status }) => {
@@ -184,7 +184,7 @@ async function cancelGetAccountPermissions(account: string): Promise<boolean> {
     })
   })
 }
-// freeze
+// vote
 async function vote(proposal_id: number, Vote: number): Promise<boolean> {
   return new Promise((resolve) => {
     api.tx.permissionCapture.vote(proposal_id, Vote).signAndSend(Alice, ({ events = [], status }) => {

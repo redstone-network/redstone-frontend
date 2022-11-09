@@ -53,11 +53,11 @@ const App: React.FC = () => {
           name="hook_url"
           rules={[{ required: true, message: 'Please input slack hook url!' }]}
         >
-          <Input style={{ width: '70%' }} placeholder="Please input your slack hook url!" />
+          <Input style={{ width: '80%' }} placeholder="Please input your slack hook url!" />
         </Form.Item>
 
         <Form.Item label="info" name="message" rules={[{ required: true, message: 'Please input info!' }]}>
-          <Input style={{ width: '70%' }} placeholder="Please input info!" />
+          <Input style={{ width: '80%' }} placeholder="Please input info!" />
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>

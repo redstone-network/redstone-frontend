@@ -31,7 +31,7 @@ const App: React.FC = () => {
       <div className="form-header">new get account permission proposal</div>
       <Form
         name="basic"
-        labelCol={{ span: 8 }}
+        labelCol={{ span: 5 }}
         wrapperCol={{ span: 16 }}
         initialValues={{ remember: true }}
         onFinish={onFinish}
@@ -44,7 +44,7 @@ const App: React.FC = () => {
           name="account"
           rules={[{ required: true, message: 'Please input free time!' }]}
         >
-          <Input />
+          <Input style={{ width: '80%' }} />
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>

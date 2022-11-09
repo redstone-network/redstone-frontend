@@ -30,7 +30,7 @@ const App: React.FC = () => {
       <div className="form-header">cancel get account permission proposal</div>
       <Form
         name="basic"
-        labelCol={{ span: 8 }}
+        labelCol={{ span: 5 }}
         wrapperCol={{ span: 16 }}
         initialValues={{ remember: true }}
         onFinish={onFinish}
@@ -39,7 +39,7 @@ const App: React.FC = () => {
         autoComplete="off"
       >
         <Form.Item label="cancel permissions acout" name="amount" rules={[{ required: true }]}>
-          <Input />
+          <Input style={{ width: '80%' }} />
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
