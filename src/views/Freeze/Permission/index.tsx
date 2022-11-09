@@ -4,6 +4,7 @@ import './index.less'
 import Account from './components/Account'
 import CancelAccount from './components/CancelAccount'
 import MemberList from './components/MemberList'
+import Approval from './components/approval'
 
 const Config: React.FC = () => {
   return (
@@ -11,6 +12,7 @@ const Config: React.FC = () => {
       <MemberList />
       <Account />
       <CancelAccount />
+      <Approval />
     </>
   )
 }
