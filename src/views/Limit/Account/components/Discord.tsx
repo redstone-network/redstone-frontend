@@ -60,15 +60,15 @@ const App: React.FC = () => {
           name="hook_url"
           rules={[{ required: true, message: 'Please input discord hook url!' }]}
         >
-          <Input placeholder="Please input your discord hook url!" />
+          <Input style={{ width: '70%' }} placeholder="Please input your discord hook url!" />
         </Form.Item>
 
         <Form.Item label="user" name="user" rules={[{ required: true, message: 'Please input user!' }]}>
-          <Input placeholder="Please input user!" />
+          <Input style={{ width: '70%' }} placeholder="Please input user!" />
         </Form.Item>
 
         <Form.Item label="content" name="content" rules={[{ required: true, message: 'Please input content!' }]}>
-          <Input placeholder="Please input content!" />
+          <Input style={{ width: '70%' }} placeholder="Please input content!" />
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>

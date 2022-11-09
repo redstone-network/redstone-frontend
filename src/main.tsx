@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom'
 import '@/assets/fonts/font.less'
 import '@styles/reset.less'
 import '@styles/common.less'
-import '@styles/theme/theme-dark.less'
+import '@styles/theme/theme-default.less'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>

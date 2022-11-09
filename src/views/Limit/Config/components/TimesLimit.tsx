@@ -29,7 +29,7 @@ const App: React.FC = () => {
       <div className="form-header">limit tx counts per 100 block config</div>
       <Form
         name="basic"
-        labelCol={{ span: 4 }}
+        labelCol={{ span: 6 }}
         wrapperCol={{ span: 16 }}
         initialValues={{ remember: true }}
         onFinish={onFinish}
@@ -41,7 +41,7 @@ const App: React.FC = () => {
           name="amount"
           rules={[{ required: true, message: 'Please input limit tx counts per 100 block!' }]}
         >
-          <Input placeholder="Please input your limit tx counts per 100 block!" />
+          <Input style={{ width: '70%' }} placeholder="Please input your limit tx counts per 100 block!" />
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>

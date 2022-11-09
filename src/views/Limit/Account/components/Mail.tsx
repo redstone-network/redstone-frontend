@@ -59,13 +59,13 @@ const App: React.FC = () => {
           name="receiver"
           rules={[{ required: true, message: 'Please input your mail!' }]}
         >
-          <Input placeholder="Please input your mail" />
+          <Input style={{ width: '70%' }} placeholder="Please input your mail" />
         </Form.Item>
         <Form.Item label="title" name="title">
-          <Input placeholder="Please input your title" />
+          <Input style={{ width: '70%' }} placeholder="Please input your title" />
         </Form.Item>
         <Form.Item label="body" name="body">
-          <Input placeholder="Please input your body" />
+          <Input style={{ width: '70%' }} placeholder="Please input your body" />
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>

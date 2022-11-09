@@ -1,6 +1,12 @@
 .layout {
   height: 100vh;
-  &-header {
-    background: linear-gradient(180deg, hsla(280, 84%, 41%, 1) 0%, hsla(218, 97%, 56%, 1) 100%); 
+  background-color: #f7f7f9;
+  .ant-layout-header&-header {
+    font-size: 16px;
+    background: linear-gradient(-90deg,#a65ef7,#4c53ff),#fff;
+  }
+  .layout-con {
+    height: calc(100% - 64px);
+    overflow-y: auto;
   }
 }
