@@ -1,22 +1,74 @@
 import { Button, Form, Input, message } from 'antd'
-import React, { useState } from 'react'
-import { setAmountLimit } from '@/substrate'
+import React, { useState, useEffect } from 'react'
+import { setAmountLimit, getLimitInfo } from '@/substrate'
 
 const App: React.FC = () => {
-  const [btnText, setBtnText] = useState('Submit')
+  const [loading, setLoading] = useState<boolean>(false)
+  const [Disabled, setDisabled] = useState<boolean>(false)
+  const [showMode, setShowMode] = useState<boolean>(true)
+  const [form] = Form.useForm()
 
+  const doEdit = () => {
+    setShowMode(false)
+  }
+  useEffect(() => {
+    getInfo()
+  }, [])
+
+  useEffect(() => {
+    if (showMode) {
+      setDisabled(true)
+    } else {
+      setDisabled(false)
+    }
+  }, [showMode])
+
+  async function getInfo() {
+    try {
+      setLoading(true)
+      setDisabled(true)
+      const [, res] = await getLimitInfo(1)
+      const amount = res?.AmountLimit?.[1] ?? null
+      console.log(amount)
+      if (amount !== null) {
+        form.setFieldsValue({
+          amount,
+        })
+        setShowMode(true)
+        setLoading(false)
+      }
+    } catch (err) {
+      setLoading(false)
+      setShowMode(false)
+      setDisabled(false)
+      console.log(err)
+    }
+  }
+  useEffect(() => {
+    if (showMode) {
+      setDisabled(true)
+    } else {
+      setDisabled(false)
+    }
+  }, [showMode])
   const onFinish = async (values: any) => {
     try {
+      setLoading(true)
+      setDisabled(true)
       const { amount } = values
       const time = new Date().getTime()
-      setBtnText('Loading')
       const res = await setAmountLimit(time, amount)
       console.log(res)
       if (res) {
-        setBtnText('Edit')
         message.info('set amount limit successfully!')
       }
+      setLoading(false)
+      setDisabled(false)
+      setDisabled(true)
     } catch (err) {
+      setLoading(false)
+      setDisabled(false)
+      setDisabled(false)
       message.error('Error!')
     }
   }
@@ -30,9 +82,11 @@ const App: React.FC = () => {
       <div className="form-header">limit amount per tx</div>
       <Form
         name="basic"
+        form={form}
         labelCol={{ span: 6 }}
         wrapperCol={{ span: 16 }}
         initialValues={{ remember: true }}
+        disabled={Disabled}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
@@ -45,12 +99,25 @@ const App: React.FC = () => {
           <Input style={{ width: '70%' }} placeholder="Please input your amount per tx!" />
         </Form.Item>
 
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit">
-            {btnText}
-          </Button>
-        </Form.Item>
+        {showMode ? null : (
+          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+            <Button loading={loading} type="primary" htmlType="submit">
+              {loading ? 'Loading' : 'Submit'}
+            </Button>
+          </Form.Item>
+        )}
       </Form>
+      {showMode ? (
+        <div>
+          <Form>
+            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+              <Button onClick={doEdit} loading={loading} type="primary" htmlType="submit">
+                Edit
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
+      ) : null}
     </div>
   )
 }

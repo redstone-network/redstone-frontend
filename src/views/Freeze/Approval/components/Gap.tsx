@@ -9,11 +9,11 @@ const App: React.FC = () => {
 
   const onFinish = async (values: any) => {
     try {
-      const { hash, vote } = values
+      const { hash, vote, accountId } = values
       const time = new Date().getTime()
       setDisabled(true)
       setBtnText('Loading...')
-      const setRes = await operationalVoting(time, seconds)
+      const setRes = await operationalVoting(accountId, hash, vote)
       if (setRes) {
         setBtnText('Submit')
         setDisabled(false)
@@ -45,6 +45,13 @@ const App: React.FC = () => {
           label="approval hash"
           name="hash"
           rules={[{ required: true, message: 'Please input approval hash!' }]}
+        >
+          <Input placeholder="Select input approval hash" style={{ width: '80%' }} />
+        </Form.Item>
+        <Form.Item
+          label="account id"
+          name="accountId"
+          rules={[{ required: true, message: 'Please input account id!' }]}
         >
           <Input placeholder="Select input approval hash" style={{ width: '80%' }} />
         </Form.Item>

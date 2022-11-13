@@ -116,6 +116,11 @@ async function setTimesLimit(time: number, amount: number): Promise<boolean> {
       })
   })
 }
+// getLimitInfo
+async function getLimitInfo(index: number) {
+  const res = await api.query.defenseModule.mapTransferLimit(index)
+  return res.toHuman()
+}
 // setFreezeTime
 async function setFreezeTime(time: number, seconds: number): Promise<boolean> {
   return new Promise((resolve) => {
@@ -225,4 +230,5 @@ export {
   operationalVoting,
   vote,
   cancelGetAccountPermissions,
+  getLimitInfo,
 }

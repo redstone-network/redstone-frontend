@@ -52,6 +52,7 @@ const App: React.FC = () => {
       setLoading(false)
       setShowMode(true)
       setDisabled(false)
+      message.info('set successfully!')
     }
   }
   const onFinishFailed = useCallback(() => {

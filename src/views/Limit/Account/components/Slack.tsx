@@ -29,6 +29,7 @@ const App: React.FC = () => {
     setDisabled(true)
     const res = await setSlack(hook_url, message)
     if (res) {
+      message.info('set successfully!')
       setLoading(false)
       setShowMode(true)
       setDisabled(false)

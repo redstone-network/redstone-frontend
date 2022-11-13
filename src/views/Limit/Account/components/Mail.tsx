@@ -1,4 +1,4 @@
-import { Button, Form, Input } from 'antd'
+import { Button, Form, Input, message } from 'antd'
 import React, { useState, useEffect } from 'react'
 import { setMail, getAccountInfo } from '@/substrate'
 import { AccountType } from '@/substrate/enum'
@@ -52,6 +52,7 @@ const App: React.FC = () => {
         setLoading(false)
         setShowMode(true)
         setDisabled(true)
+        message.info('set successfully!')
       }
     } catch (err) {
       setLoading(false)
