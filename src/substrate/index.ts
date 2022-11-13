@@ -3,8 +3,8 @@ import { Keyring } from '@polkadot/keyring'
 import { AccountType } from './enum'
 
 // Construct
-// const wsProvider = new WsProvider('ws://127.0.0.1:9944')
-const wsProvider = new WsProvider('wss://rpc.polkadot.io')
+const wsProvider = new WsProvider('ws://127.0.0.1:9944')
+// const wsProvider = new WsProvider('wss://rpc.polkadot.io')
 const api = await ApiPromise.create({ provider: wsProvider })
 
 // Do something

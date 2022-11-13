@@ -7,10 +7,11 @@ const App: React.FC = () => {
   const [form] = Form.useForm()
   const [loading, setLoading] = useState<boolean>(false)
   const [Disabled, setDisabled] = useState<boolean>(false)
-  const [btnText, setBtnText] = useState<string>('Submit')
-
+  const [showMode, setShowMode] = useState<boolean>(true)
   async function getInfo() {
     try {
+      setLoading(true)
+      setDisabled(true)
       const { MailWithToken } = await getAccountInfo(AccountType.Mail)
       const [, , receiver, title, body] = MailWithToken
       form.setFieldsValue({
@@ -18,25 +19,43 @@ const App: React.FC = () => {
         title,
         body,
       })
+      setLoading(false)
+      if (receiver) {
+        setShowMode(true)
+      }
     } catch (err) {
+      setLoading(false)
+      setDisabled(false)
       console.log(err)
     }
+  }
+  const doEdit = () => {
+    setShowMode(false)
   }
   useEffect(() => {
     getInfo()
   }, [])
+  useEffect(() => {
+    if (showMode) {
+      setDisabled(true)
+    } else {
+      setDisabled(false)
+    }
+  }, [showMode])
   const onFinish = async (values: any) => {
     try {
       const { receiver, title, body } = values
-      setBtnText('Loading')
       setLoading(true)
       setDisabled(true)
       const res = await setMail(receiver, title, body)
       if (res) {
         setLoading(false)
-        setDisabled(false)
+        setShowMode(true)
+        setDisabled(true)
       }
     } catch (err) {
+      setLoading(false)
+      setDisabled(false)
       console.log(err)
     }
   }
@@ -67,13 +86,25 @@ const App: React.FC = () => {
         <Form.Item label="body" name="body">
           <Input style={{ width: '80%' }} placeholder="Please input your body" />
         </Form.Item>
-
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button loading={loading} type="primary" htmlType="submit">
-            {btnText}
-          </Button>
-        </Form.Item>
+        {showMode ? null : (
+          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+            <Button loading={loading} type="primary" htmlType="submit">
+              {loading ? 'Loading' : 'Submit'}
+            </Button>
+          </Form.Item>
+        )}
       </Form>
+      {showMode ? (
+        <div>
+          <Form>
+            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+              <Button onClick={doEdit} loading={loading} type="primary" htmlType="submit">
+                Edit
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
+      ) : null}
     </div>
   )
 }

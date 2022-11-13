@@ -7,28 +7,50 @@ const App: React.FC = () => {
   const [form] = Form.useForm()
   const [loading, setLoading] = useState<boolean>(false)
   const [Disabled, setDisabled] = useState<boolean>(false)
-  const [btnText, setBtnText] = useState<string>('Submit')
+  const [showMode, setShowMode] = useState<boolean>(true)
+
+  const doEdit = () => {
+    setShowMode(false)
+  }
+  useEffect(() => {
+    getInfo()
+  }, [])
+  useEffect(() => {
+    if (showMode) {
+      setDisabled(true)
+    } else {
+      setDisabled(false)
+    }
+  }, [showMode])
 
   const onFinish = async (values: any) => {
     const { hook_url, message } = values
-    setBtnText('Loading')
     setLoading(true)
     setDisabled(true)
     const res = await setSlack(hook_url, message)
     if (res) {
       setLoading(false)
+      setShowMode(true)
       setDisabled(false)
     }
   }
   async function getInfo() {
     try {
+      setLoading(true)
+      setDisabled(true)
       const { Slack } = await getAccountInfo(AccountType.Slack)
       const [hook_url, message] = Slack
       form.setFieldsValue({
         hook_url,
         message,
       })
+      setLoading(false)
+      if (hook_url) {
+        setShowMode(true)
+      }
     } catch (err) {
+      setLoading(false)
+      setDisabled(false)
       console.log(err)
     }
   }
@@ -60,12 +82,25 @@ const App: React.FC = () => {
           <Input style={{ width: '80%' }} placeholder="Please input info!" />
         </Form.Item>
 
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button loading={loading} type="primary" htmlType="submit">
-            {btnText}
-          </Button>
-        </Form.Item>
+        {showMode ? null : (
+          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+            <Button loading={loading} type="primary" htmlType="submit">
+              {loading ? 'Loading' : 'Submit'}
+            </Button>
+          </Form.Item>
+        )}
       </Form>
+      {showMode ? (
+        <div>
+          <Form>
+            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+              <Button onClick={doEdit} loading={loading} type="primary" htmlType="submit">
+                Edit
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
+      ) : null}
     </div>
   )
 }

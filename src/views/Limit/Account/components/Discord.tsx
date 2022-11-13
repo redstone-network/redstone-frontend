@@ -7,10 +7,25 @@ const App: React.FC = () => {
   const [form] = Form.useForm()
   const [loading, setLoading] = useState<boolean>(false)
   const [Disabled, setDisabled] = useState<boolean>(false)
-  const [btnText, setBtnText] = useState<string>('Submit')
+  const [showMode, setShowMode] = useState<boolean>(true)
 
+  const doEdit = () => {
+    setShowMode(false)
+  }
+  useEffect(() => {
+    getInfo()
+  }, [])
+  useEffect(() => {
+    if (showMode) {
+      setDisabled(true)
+    } else {
+      setDisabled(false)
+    }
+  }, [showMode])
   async function getInfo() {
     try {
+      setLoading(true)
+      setDisabled(true)
       const { Discord } = await getAccountInfo(AccountType.Discord)
       const [hook_url, user, content] = Discord
       form.setFieldsValue({
@@ -18,21 +33,24 @@ const App: React.FC = () => {
         user,
         content,
       })
+      setLoading(false)
+      if (hook_url) {
+        setShowMode(true)
+      }
     } catch (err) {
+      setLoading(false)
+      setDisabled(false)
       console.log(err)
     }
   }
-  useEffect(() => {
-    getInfo()
-  }, [])
   const onFinish = async (values: any) => {
     const { hook_url, user, content } = values
-    setBtnText('Loading')
     setLoading(true)
     setDisabled(true)
     const res = await setDiscord(hook_url, user, content)
     if (res) {
       setLoading(false)
+      setShowMode(true)
       setDisabled(false)
     }
   }
@@ -71,12 +89,25 @@ const App: React.FC = () => {
           <Input style={{ width: '80%' }} placeholder="Please input content!" />
         </Form.Item>
 
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button loading={loading} type="primary" htmlType="submit">
-            {btnText}
-          </Button>
-        </Form.Item>
+        {showMode ? null : (
+          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+            <Button loading={loading} type="primary" htmlType="submit">
+              {loading ? 'Loading' : 'Submit'}
+            </Button>
+          </Form.Item>
+        )}
       </Form>
+      {showMode ? (
+        <div>
+          <Form>
+            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+              <Button onClick={doEdit} loading={loading} type="primary" htmlType="submit">
+                Edit
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
+      ) : null}
     </div>
   )
 }
