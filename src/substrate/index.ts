@@ -1,10 +1,11 @@
 import { ApiPromise, WsProvider } from '@polkadot/api'
 import { Keyring } from '@polkadot/keyring'
 import { AccountType } from './enum'
-
+import { store } from '@/store'
 // Construct
 const wsProvider = new WsProvider('ws://127.0.0.1:9944')
-console.log('初始化')
+
+const userAccount = store.getState().account.value
 // const wsProvider = new WsProvider('wss://rpc.polkadot.io')
 const api = await ApiPromise.create({ provider: wsProvider })
 console.log('初始化完成')
@@ -20,8 +21,6 @@ function getUser(userName: string) {
   const user = keyring.addFromUri(`//${userName}`)
   return user
 }
-const Alice = getUser('Alice')
-console.log(Alice)
 
 async function getChainInfo() {
   // 1. 查看本条链的信息
@@ -42,6 +41,10 @@ async function getChainInfo() {
 
 // setMail
 async function setMail(receiver: string, title: string, body: string) {
+  if (!userAccount) {
+    return Promise.reject('no account')
+  }
+  const Alice = getUser(userAccount)
   return new Promise((resolve) => {
     api.tx.notification.setMail(receiver, title, body).signAndSend(Alice, ({ events = [], status }) => {
       if (status.isFinalized) {
@@ -56,6 +59,10 @@ async function setMail(receiver: string, title: string, body: string) {
 
 // setDiscord
 async function setSlack(hook_url: string, message: string) {
+  if (!userAccount) {
+    return Promise.reject('no account')
+  }
+  const Alice = getUser(userAccount)
   return new Promise((resolve) => {
     api.tx.notification.setSlack(hook_url, message).signAndSend(Alice, ({ events = [], status }) => {
       console.log(222)
@@ -70,6 +77,10 @@ async function setSlack(hook_url: string, message: string) {
 }
 // setDiscord
 async function setDiscord(hook_url: string, user: string, content: string): Promise<boolean> {
+  if (!userAccount) {
+    return Promise.reject('no account')
+  }
+  const Alice = getUser(userAccount)
   return new Promise((resolve) => {
     api.tx.notification.setDiscord(hook_url, user, content).signAndSend(Alice, ({ events = [], status }) => {
       if (status.isFinalized) {
@@ -84,11 +95,19 @@ async function setDiscord(hook_url: string, user: string, content: string): Prom
 }
 // getInfo
 async function getAccountInfo(index: AccountType) {
+  if (!userAccount) {
+    return Promise.reject('no account')
+  }
+  const Alice = getUser(userAccount)
   const res = await api.query.notification.mapNofityAction(Alice.address, index)
   return res.toHuman()
 }
 // set amount limit
 async function setAmountLimit(time: number, amount: number): Promise<boolean> {
+  if (!userAccount) {
+    return Promise.reject('no account')
+  }
+  const Alice = getUser(userAccount)
   return new Promise((resolve) => {
     api.tx.defenseModule
       .setTransferLimit({ amountLimit: [time, amount] })
@@ -104,6 +123,10 @@ async function setAmountLimit(time: number, amount: number): Promise<boolean> {
 }
 // set the timesLimit
 async function setTimesLimit(time: number, amount: number): Promise<boolean> {
+  if (!userAccount) {
+    return Promise.reject('no account')
+  }
+  const Alice = getUser(userAccount)
   return new Promise((resolve) => {
     api.tx.defenseModule
       .setTransferLimit({ timesLimit: [time, amount] })
@@ -120,11 +143,23 @@ async function setTimesLimit(time: number, amount: number): Promise<boolean> {
 }
 // getLimitInfo
 async function getLimitInfo(index: number) {
-  const res = await api.query.defenseModule.mapTransferLimit(index)
+  console.log('sss')
+  if (!userAccount) {
+    return Promise.reject('no account')
+  }
+  console.log('dddd')
+  const Alice = getUser(userAccount)
+  console.log('eee', Alice)
+  const res = await api.query.defenseModule.TransferLimitOwner(Alice.address, index)
+  console.log('ccc', res)
   return res.toHuman()
 }
 // setFreezeTime
 async function setFreezeTime(time: number, seconds: number): Promise<boolean> {
+  if (!userAccount) {
+    return false
+  }
+  const Alice = getUser(userAccount)
   return new Promise((resolve) => {
     api.tx.defenseModule
       .setRiskManagement({ timeFreeze: [time, seconds] })
@@ -141,6 +176,10 @@ async function setFreezeTime(time: number, seconds: number): Promise<boolean> {
 }
 // freeze
 async function doFreeze(frozen: boolean): Promise<boolean> {
+  if (!userAccount) {
+    return Promise.reject('no account')
+  }
+  const Alice = getUser(userAccount)
   return new Promise((resolve) => {
     api.tx.defenseModule.setRiskManagement({ accountFreeze: frozen }).signAndSend(Alice, ({ events = [], status }) => {
       if (status.isFinalized) {
@@ -154,6 +193,10 @@ async function doFreeze(frozen: boolean): Promise<boolean> {
 }
 // createCaptureConfig
 async function createCaptureConfig(list: string[], Threshold: number): Promise<boolean> {
+  if (!userAccount) {
+    return Promise.reject('no account')
+  }
+  const Alice = getUser(userAccount)
   return new Promise((resolve) => {
     api.tx.permissionCapture.createCaptureConfig(list, Threshold).signAndSend(Alice, ({ events = [], status }) => {
       if (status.isFinalized) {
@@ -167,6 +210,10 @@ async function createCaptureConfig(list: string[], Threshold: number): Promise<b
 }
 // createGetAccountPermissions
 async function createGetAccountPermissions(account: string): Promise<boolean> {
+  if (!userAccount) {
+    return Promise.reject('no account')
+  }
+  const Alice = getUser(userAccount)
   return new Promise((resolve) => {
     api.tx.permissionCapture.createGetAccountPermissions(account).signAndSend(Alice, ({ events = [], status }) => {
       if (status.isFinalized) {
@@ -180,6 +227,10 @@ async function createGetAccountPermissions(account: string): Promise<boolean> {
 }
 // cancelGetAccountPermissions
 async function cancelGetAccountPermissions(account: string): Promise<boolean> {
+  if (!userAccount) {
+    return Promise.reject('no account')
+  }
+  const Alice = getUser(userAccount)
   return new Promise((resolve) => {
     api.tx.permissionCapture.cancelGetAccountPermissions(account).signAndSend(Alice, ({ events = [], status }) => {
       if (status.isFinalized) {
@@ -193,6 +244,10 @@ async function cancelGetAccountPermissions(account: string): Promise<boolean> {
 }
 // vote
 async function vote(proposal_id: number, Vote: number): Promise<boolean> {
+  if (!userAccount) {
+    return Promise.reject('no account')
+  }
+  const Alice = getUser(userAccount)
   return new Promise((resolve) => {
     api.tx.permissionCapture.vote(proposal_id, Vote).signAndSend(Alice, ({ events = [], status }) => {
       if (status.isFinalized) {
@@ -205,6 +260,10 @@ async function vote(proposal_id: number, Vote: number): Promise<boolean> {
   })
 }
 async function operationalVoting(hash: number, Vote: number): Promise<boolean> {
+  if (!userAccount) {
+    return Promise.reject('no account')
+  }
+  const Alice = getUser(userAccount)
   return new Promise((resolve) => {
     api.tx.permissionCapture.operationalVoting(hash, Vote).signAndSend(Alice, ({ events = [], status }) => {
       if (status.isFinalized) {
@@ -233,4 +292,5 @@ export {
   vote,
   cancelGetAccountPermissions,
   getLimitInfo,
+  getUser,
 }

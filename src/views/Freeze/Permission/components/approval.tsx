@@ -16,10 +16,15 @@ const App: React.FC = () => {
       if (setRes) {
         setBtnText('Submit')
         setDisabled(false)
+        message.success('Success!')
         return
       }
+      setBtnText('Submit')
+      setDisabled(false)
       message.error('Error!')
     } catch (error) {
+      setBtnText('Submit')
+      setDisabled(false)
       message.error('Error!')
     }
   }

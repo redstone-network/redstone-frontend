@@ -1,61 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { Avatar, Menu, message, Modal } from 'antd'
-import type { RootState } from '@store/index'
-
+import { Avatar, Menu } from 'antd'
 import type { MenuProps } from 'antd'
 import './NavBar.less'
-import { MehOutlined, UserOutlined } from '@ant-design/icons'
-import { useAppSelector, useAppDispatch } from '@store/hooks'
-import { setAccount } from '@store/account'
-import { CheckCircleTwoTone } from '@ant-design/icons'
+import { UserOutlined } from '@ant-design/icons'
+import type { RootState } from '@store/index'
+import { useAppSelector } from '@store/hooks'
+import Login from '@/components/AccountModel'
+
 const items: MenuProps['items'] = [
   { label: 'TX LIMIT CONFIG', key: '/Limit' },
   { label: 'FREEZE CONFIG', key: '/Freeze' },
 ]
-const accountList = [
-  { value: 'Alice', color: '#52c41a', bg: 'fde3cf' },
-  { value: 'Bob', color: '#52c41a', bg: 'fde3cf' },
-  { value: 'Charlie', color: '#52c41a', bg: 'fde3cf' },
-  { value: 'Dave', color: '#52c41a', bg: 'fde3cf' },
-  { value: 'Eve', color: '#52c41a', bg: 'fde3cf' },
-]
+
 const NavBar: React.FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const storeAccount = useAppSelector((state: RootState) => state.account.value)
-  const dispatch = useAppDispatch()
   const navigate = useNavigate()
-
-  // 设置account
-  useEffect(() => {
-    const accountInfoInSession = sessionStorage.getItem('accountInfo')
-    if (accountInfoInSession && accountList.map((item) => item.value).includes(accountInfoInSession)) {
-      dispatch(setAccount(accountInfoInSession))
-    } else {
-      setIsModalOpen(true)
-    }
-  }, [])
-  // 改变account
-  const changeAccount = function (account: string) {
-    if (storeAccount !== account) {
-      dispatch(setAccount(account))
-      sessionStorage.setItem('accountInfo', account)
-    }
-    setIsModalOpen(false)
-  }
-
-  const showModal = () => {
-    setIsModalOpen(true)
-  }
-  const onCancel = () => {
-    if (storeAccount) {
-      setIsModalOpen(false)
-    } else {
-      message.info('place change an account')
-    }
-  }
-
+  const storeAccount = useAppSelector((state: RootState) => state.account.value)
   const [current, setCurrent] = useState('')
+  const [accountModel, setAccountModel] = useState(false)
   const { pathname } = useLocation()
 
   useEffect(() => {
@@ -65,6 +27,12 @@ const NavBar: React.FC = () => {
   const itemHandler: MenuProps['onClick'] = ({ key }) => {
     setCurrent(key)
     navigate(key)
+  }
+  const nameClick = () => {
+    setAccountModel(true)
+  }
+  const changeModal = (open: boolean) => {
+    setAccountModel(open)
   }
 
   return (
@@ -81,29 +49,12 @@ const NavBar: React.FC = () => {
           <Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf', marginRight: '6px' }}>
             <UserOutlined />
           </Avatar>
-          <span style={{ cursor: 'pointer' }} onClick={showModal}>
+          <span onClick={nameClick} style={{ cursor: 'pointer' }}>
             {storeAccount.toUpperCase()}
           </span>
         </div>
       </div>
-      <Modal title="change account" footer={null} centered onCancel={onCancel} open={isModalOpen}>
-        {accountList.map((item) => {
-          return (
-            <p
-              onClick={() => changeAccount(item.value)}
-              className={`accountItem ${storeAccount === item.value ? 'active' : ''}`}
-              key={item.value}
-            >
-              {storeAccount === item.value ? (
-                <CheckCircleTwoTone className="itemIcon" twoToneColor="#52c41a" />
-              ) : (
-                <MehOutlined className="itemIcon" />
-              )}
-              {item.value.toUpperCase()}
-            </p>
-          )
-        })}
-      </Modal>
+      <Login open={accountModel} changeModal={changeModal} />
     </>
   )
 }

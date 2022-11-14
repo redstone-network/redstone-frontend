@@ -5,7 +5,7 @@ interface CounterState {
   value: string
 }
 const initialState: CounterState = {
-  value: '',
+  value: sessionStorage.getItem('accountInfo') || '',
 }
 export const counterSlice = createSlice({
   name: 'account',

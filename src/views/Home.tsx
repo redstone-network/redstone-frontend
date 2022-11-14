@@ -1,15 +1,17 @@
-import React, { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from 'react'
+import Login from '@/components/AccountModel'
 
 import { Spin } from 'antd'
 
 const Home: React.FC = () => {
-  console.log('Home')
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    navigate('/Limit')
-  }, [])
-  return <Spin style={{ width: '100%', paddingTop: '50vh', height: '100vh' }} />
+  const [accountModel, setAccountModel] = useState(false)
+  const onChange = (value: boolean) => {
+    setAccountModel(value)
+  }
+  return (
+    <Spin style={{ width: '100%', paddingTop: '50vh', height: '100vh' }}>
+      <Login open={accountModel} changeModal={onChange} />
+    </Spin>
+  )
 }
 export default Home

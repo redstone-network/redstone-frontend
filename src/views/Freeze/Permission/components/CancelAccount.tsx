@@ -14,9 +14,14 @@ const App: React.FC = () => {
       const res = await cancelGetAccountPermissions(account)
       if (res) {
         message.info('Successful!')
+        return
       }
+      setBtnText('Submit')
+      setDisabled(false)
     } catch (err) {
       console.log(err)
+      setBtnText('Submit')
+      setDisabled(false)
       message.error('Error!')
     }
     setDisabled(false)

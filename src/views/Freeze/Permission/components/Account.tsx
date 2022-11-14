@@ -14,13 +14,16 @@ const App: React.FC = () => {
       const res = await createGetAccountPermissions(account)
       if (res) {
         message.info('Successful!')
+        return
       }
+      setBtnText('Submit')
+      setDisabled(false)
     } catch (err) {
       console.log(err)
+      setBtnText('Submit')
+      setDisabled(false)
       message.error('Error!')
     }
-    setDisabled(false)
-    setBtnText('Submit')
   }
   const onFinishFailed = function () {
     message.error('please input the required fields!')
