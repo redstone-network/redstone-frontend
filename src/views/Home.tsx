@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { Spin } from 'antd'
 
 const Home: React.FC = () => {
+  console.log('Home')
   const navigate = useNavigate()
 
   useEffect(() => {

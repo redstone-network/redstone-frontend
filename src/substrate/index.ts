@@ -4,8 +4,10 @@ import { AccountType } from './enum'
 
 // Construct
 const wsProvider = new WsProvider('ws://127.0.0.1:9944')
+console.log('初始化')
 // const wsProvider = new WsProvider('wss://rpc.polkadot.io')
 const api = await ApiPromise.create({ provider: wsProvider })
+console.log('初始化完成')
 
 // Do something
 async function getHex() {

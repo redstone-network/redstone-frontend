@@ -21,11 +21,13 @@
     "@polkadot/types": "^9.5.1",
     "@polkadot/util": "^10.1.11",
     "@polkadot/util-crypto": "^10.1.11",
+    "@reduxjs/toolkit": "^1.9.0",
     "antd": "^4.23.5",
     "axios": "^0.27.2",
     "dayjs": "^1.11.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-redux": "^8.0.5",
     "react-router-dom": "^6.3.0",
     "vconsole": "^3.14.6"
   },
