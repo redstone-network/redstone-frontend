@@ -2,7 +2,7 @@
 
 ## Getting Started
 
-Install:  pnpm install
+Install: pnpm install
 
 Running Projects：pnpm dev
 
