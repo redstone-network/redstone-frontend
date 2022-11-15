@@ -4,7 +4,7 @@ import { setFreezeTime, doFreeze } from '@/substrate'
 const { Option } = Select
 
 const App: React.FC = () => {
-  const freeText = 'freeze current account'
+  const freeText = 'freeze time config'
   const [btnText, setBtnText] = useState('freeText')
   const [disabled, setDisabled] = useState(false)
 
@@ -13,16 +13,19 @@ const App: React.FC = () => {
       const { seconds } = values
       const time = new Date().getTime()
       setDisabled(true)
-      setBtnText('freezing...')
+      setBtnText('Loading...')
       const setRes = await setFreezeTime(time, seconds)
       if (setRes) {
         await doFreeze(true)
         setBtnText(freeText)
         setDisabled(false)
+        message.info('Success!')
         return
       }
       message.error('Error!')
     } catch (error) {
+      setBtnText(freeText)
+      setDisabled(false)
       message.error('Error!')
     }
   }
