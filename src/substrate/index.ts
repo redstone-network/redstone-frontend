@@ -143,15 +143,11 @@ async function setTimesLimit(time: number, amount: number): Promise<boolean> {
 }
 // getLimitInfo
 async function getLimitInfo(index: number) {
-  console.log('sss')
   if (!userAccount) {
     return Promise.reject('no account')
   }
-  console.log('dddd')
   const Alice = getUser(userAccount)
-  console.log('eee', Alice)
-  const res = await api.query.defenseModule.TransferLimitOwner(Alice.address, index)
-  console.log('ccc', res)
+  const res = await api.query.defenseModule.transferLimitOwner(Alice.address, index)
   return res.toHuman()
 }
 // setFreezeTime

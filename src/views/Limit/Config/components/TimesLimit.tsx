@@ -27,7 +27,7 @@ const App: React.FC = () => {
     try {
       setLoading(true)
       setDisabled(true)
-      const [, res] = await getLimitInfo(0)
+      const res = await getLimitInfo(0)
       const amount = res?.TimesLimit?.[1] ?? null
       console.log(amount)
       if (amount !== null) {

@@ -27,9 +27,8 @@ const App: React.FC = () => {
     try {
       setLoading(true)
       setDisabled(true)
-      const [, res] = await getLimitInfo(1)
+      const res = await getLimitInfo(1)
       const amount = res?.AmountLimit?.[1] ?? null
-      console.log(amount)
       if (amount !== null) {
         form.setFieldsValue({
           amount,
