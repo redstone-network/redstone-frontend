@@ -52,7 +52,6 @@ const App: React.FC = () => {
     } catch (err) {
       setLoading(false)
       setDisabled(false)
-      console.log(err)
     }
   }
   useEffect(() => {

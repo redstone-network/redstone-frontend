@@ -35,8 +35,9 @@ const App: React.FC = () => {
           amount,
         })
         setShowMode(true)
-        setLoading(false)
       }
+      setDisabled(false)
+      setLoading(false)
     } catch (err) {
       setLoading(false)
       setShowMode(false)
@@ -44,13 +45,7 @@ const App: React.FC = () => {
       console.log(err)
     }
   }
-  useEffect(() => {
-    if (showMode) {
-      setDisabled(true)
-    } else {
-      setDisabled(false)
-    }
-  }, [showMode])
+
   const onFinish = async (values: any) => {
     try {
       const { amount } = values
@@ -60,14 +55,13 @@ const App: React.FC = () => {
       const res = await setTimesLimit(time, amount)
       console.log(res)
       if (res) {
-        setDisabled(true)
-        message.info('set amount limit successfully!')
+        setShowMode(true)
+        message.info('Success!')
       }
       setLoading(false)
       setDisabled(false)
     } catch (err) {
       setLoading(false)
-      setDisabled(false)
       setDisabled(false)
       message.error('Error!')
     }

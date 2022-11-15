@@ -40,7 +40,6 @@ const App: React.FC = () => {
     } catch (err) {
       setLoading(false)
       setDisabled(false)
-      console.log(err)
     }
   }
   const onFinish = async (values: any) => {

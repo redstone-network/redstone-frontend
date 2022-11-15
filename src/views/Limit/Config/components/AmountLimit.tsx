@@ -58,16 +58,14 @@ const App: React.FC = () => {
       const { amount } = values
       const time = new Date().getTime()
       const res = await setAmountLimit(time, amount)
-      console.log(res)
       if (res) {
-        message.info('set amount limit successfully!')
+        message.info('Success!')
+        setShowMode(true)
       }
       setLoading(false)
       setDisabled(false)
-      setDisabled(true)
     } catch (err) {
       setLoading(false)
-      setDisabled(false)
       setDisabled(false)
       message.error('Error!')
     }
