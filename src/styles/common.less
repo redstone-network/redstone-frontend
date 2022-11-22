@@ -1,0 +1,136 @@
+/* 常用 flex */
+.flx-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.flx-justify-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.flx-align-center {
+  display: flex;
+  align-items: center;
+}
+
+/* 清除浮动 */
+.clearfix::after {
+  display: block;
+  height: 0;
+  overflow: hidden;
+  clear: both;
+  content: '';
+}
+
+/* 文字单行省略号 */
+.sle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 文字多行省略号 */
+.mle {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+/* 文字多了自動換行 */
+.break-word {
+  word-break: break-all;
+  word-wrap: break-word;
+}
+
+/* page switch animation */
+.fade-enter {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+.fade-enter-active,
+.fade-exit-active {
+  opacity: 1;
+  transition: all 0.2s ease-out;
+  transform: translateX(0);
+}
+.fade-exit {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+/* scroll bar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: #ffffff;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #dddee0;
+  border-radius: 20px;
+  box-shadow: inset 0 0 0 #ffffff;
+}
+
+/* card 卡片样式 */
+.card {
+  box-sizing: border-box;
+  padding: 20px;
+  overflow-x: hidden;
+  border: 1px solid #e4e7ed;
+  border-radius: 4px;
+}
+
+/* content-box */
+.content-box {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  .text {
+    margin: 30px 0;
+    font-size: 23px;
+    font-weight: 700;
+    text-align: center;
+    a {
+      text-decoration: underline !important;
+    }
+  }
+}
+.form-box {
+  width: 90%;
+  margin: 0 auto;
+  background: #f7f7f9;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, rgba(46, 51, 238, 0.09), rgba(118, 67, 254, 0.05));
+    opacity: 0;
+    transition: opacity 0.15s ease-out;
+    z-index: -1;
+    border-radius: 8px;
+  }
+  box-shadow: 0px 4px 12px rgb(0 0 0 / 8%), 0px 1px 20px rgb(0 0 0 / 4%);
+  .form-header {
+    font-size: 24px;
+    text-align: center;
+    padding: 8px 0;
+  }
+  .ant-input, .ant-input-number, .ant-select {
+    background: #f7f7f9;
+  }
+}
+.edit-btn {
+  width: 80%;
+  display: flex;
+  justify-content: center;
+}
