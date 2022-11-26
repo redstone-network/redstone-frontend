@@ -25,7 +25,7 @@ const App: React.FC = () => {
       }
     } catch (err) {
       setLoading(false)
-      setDisabled(false)
+      setShowMode(false)
       console.log(err)
     }
   }
@@ -45,6 +45,7 @@ const App: React.FC = () => {
   const onFinish = async (values: any) => {
     try {
       const { receiver, title, body } = values
+      console.log('ssss')
       setLoading(true)
       setDisabled(true)
       const res = await setMail(receiver, title, body)
@@ -57,6 +58,7 @@ const App: React.FC = () => {
     } catch (err) {
       setLoading(false)
       setDisabled(false)
+      console.log(err)
     }
   }
 

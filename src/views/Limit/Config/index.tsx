@@ -2,12 +2,12 @@ import React from 'react'
 import './index.less'
 
 import AmountLimit from './components/AmountLimit'
-import HundredLimit from './components/TimesLimit'
+import FrequencyLimit from './components/FrequencyLimit'
 
 const Config: React.FC = () => {
   return (
     <>
-      <HundredLimit />
+      <FrequencyLimit />
       <AmountLimit />
     </>
   )

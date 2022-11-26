@@ -1,22 +1,20 @@
 import { Button, Form, message, Select } from 'antd'
 import React, { useState } from 'react'
-import { setFreezeTime, doFreeze } from '@/substrate'
+import { setFreezeTime } from '@/substrate'
 const { Option } = Select
 
 const App: React.FC = () => {
-  const freeText = 'freeze time config'
-  const [btnText, setBtnText] = useState('freeText')
+  const freeText = 'Submit'
+  const [btnText, setBtnText] = useState(freeText)
   const [disabled, setDisabled] = useState(false)
 
   const onFinish = async (values: any) => {
     try {
       const { seconds } = values
-      const time = new Date().getTime()
       setDisabled(true)
       setBtnText('Loading...')
-      const setRes = await setFreezeTime(time, seconds)
+      const setRes = await setFreezeTime(Math.ceil(seconds / 2))
       if (setRes) {
-        await doFreeze(true)
         setBtnText(freeText)
         setDisabled(false)
         message.info('Success!')

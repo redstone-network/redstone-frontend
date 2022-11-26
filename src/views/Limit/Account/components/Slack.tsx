@@ -1,4 +1,4 @@
-import { Button, Form, Input } from 'antd'
+import { Button, Form, Input, message } from 'antd'
 import React from 'react'
 import { getAccountInfo, setSlack } from '@/substrate'
 import { AccountType } from '@/substrate/enum'
@@ -24,10 +24,11 @@ const App: React.FC = () => {
   }, [showMode])
 
   const onFinish = async (values: any) => {
-    const { hook_url, message } = values
+    const { hook_url, message: messages } = values
+    console.log('ssss')
     setLoading(true)
     setDisabled(true)
-    const res = await setSlack(hook_url, message)
+    const res = await setSlack(hook_url, messages)
     if (res) {
       message.info('set successfully!')
       setLoading(false)
@@ -51,7 +52,7 @@ const App: React.FC = () => {
       }
     } catch (err) {
       setLoading(false)
-      setDisabled(false)
+      setShowMode(false)
     }
   }
   useEffect(() => {
@@ -94,7 +95,7 @@ const App: React.FC = () => {
         <div>
           <Form>
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-              <Button onClick={doEdit} loading={loading} type="primary" htmlType="submit">
+              <Button onClick={doEdit} loading={loading} type="primary">
                 Edit
               </Button>
             </Form.Item>

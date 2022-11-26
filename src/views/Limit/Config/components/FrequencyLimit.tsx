@@ -1,5 +1,5 @@
-import { getLimitInfo, setTimesLimit } from '@/substrate'
-import { Button, Form, Input, message } from 'antd'
+import { getLimitInfo, setFrequencyLimit } from '@/substrate'
+import { Button, Form, Input, InputNumber, message } from 'antd'
 import React, { useEffect } from 'react'
 
 const App: React.FC = () => {
@@ -27,17 +27,20 @@ const App: React.FC = () => {
     try {
       setLoading(true)
       setDisabled(true)
-      const res = await getLimitInfo(0)
-      const amount = res?.TimesLimit?.[1] ?? null
-      console.log(amount)
-      if (amount !== null) {
+      const res = await getLimitInfo(2)
+      const data = res?.FrequencyLimit ?? null
+      if (data !== null) {
+        const [amount, total] = data
         form.setFieldsValue({
           amount,
+          total,
         })
         setShowMode(true)
+        setLoading(false)
+      } else {
+        setLoading(false)
+        setShowMode(false)
       }
-      setDisabled(false)
-      setLoading(false)
     } catch (err) {
       setLoading(false)
       setShowMode(false)
@@ -48,11 +51,10 @@ const App: React.FC = () => {
 
   const onFinish = async (values: any) => {
     try {
-      const { amount } = values
-      const time = new Date().getTime()
+      const { amount, total } = values
       setLoading(true)
       setDisabled(true)
-      const res = await setTimesLimit(time, amount)
+      const res = await setFrequencyLimit(amount, total)
       console.log(res)
       if (res) {
         setShowMode(true)
@@ -72,7 +74,7 @@ const App: React.FC = () => {
   }
   return (
     <div className="form-box">
-      <div className="form-header">limit tx counts per 100 block config</div>
+      <div className="form-header">limit tx counts</div>
       <Form
         name="basic"
         form={form}
@@ -85,11 +87,19 @@ const App: React.FC = () => {
         autoComplete="off"
       >
         <Form.Item
-          label="limit tx counts per 100 block"
-          name="amount"
-          rules={[{ required: true, message: 'Please input limit tx counts per 100 block!' }]}
+          label="block counts"
+          name="total"
+          rules={[{ required: true, message: 'Please input  block counts' }]}
         >
-          <Input style={{ width: '70%' }} placeholder="Please input your limit tx counts per 100 block!" />
+          <InputNumber min={0} style={{ width: '70%' }} placeholder="Please input  block counts" />
+        </Form.Item>
+
+        <Form.Item
+          label="limit tx counts"
+          name="amount"
+          rules={[{ required: true, message: 'Please input limit tx counts' }]}
+        >
+          <InputNumber min={0} style={{ width: '70%' }} placeholder="Please input your limit tx counts" />
         </Form.Item>
 
         {showMode ? null : (
@@ -104,7 +114,7 @@ const App: React.FC = () => {
         <div>
           <Form>
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-              <Button onClick={doEdit} loading={loading} type="primary" htmlType="submit">
+              <Button onClick={doEdit} loading={loading} type="primary">
                 Edit
               </Button>
             </Form.Item>

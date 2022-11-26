@@ -39,7 +39,7 @@ const App: React.FC = () => {
       }
     } catch (err) {
       setLoading(false)
-      setDisabled(false)
+      setShowMode(false)
     }
   }
   const onFinish = async (values: any) => {
@@ -101,7 +101,7 @@ const App: React.FC = () => {
         <div>
           <Form>
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-              <Button onClick={doEdit} loading={loading} type="primary" htmlType="submit">
+              <Button onClick={doEdit} loading={loading} type="primary">
                 Edit
               </Button>
             </Form.Item>

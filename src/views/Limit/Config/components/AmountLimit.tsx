@@ -28,18 +28,21 @@ const App: React.FC = () => {
       setLoading(true)
       setDisabled(true)
       const res = await getLimitInfo(1)
-      const amount = res?.AmountLimit?.[1] ?? null
+      console.log(res)
+      const amount = res?.AmountLimit ?? null
       if (amount !== null) {
         form.setFieldsValue({
           amount,
         })
         setShowMode(true)
         setLoading(false)
+      } else {
+        setLoading(false)
+        setShowMode(false)
       }
     } catch (err) {
       setLoading(false)
       setShowMode(false)
-      setDisabled(false)
       console.log(err)
     }
   }
@@ -64,6 +67,7 @@ const App: React.FC = () => {
       setLoading(false)
       setDisabled(false)
     } catch (err) {
+      console.log(err)
       setLoading(false)
       setDisabled(false)
       message.error('Error!')
@@ -108,7 +112,7 @@ const App: React.FC = () => {
         <div>
           <Form>
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-              <Button onClick={doEdit} loading={loading} type="primary" htmlType="submit">
+              <Button onClick={doEdit} loading={loading} type="primary">
                 Edit
               </Button>
             </Form.Item>
