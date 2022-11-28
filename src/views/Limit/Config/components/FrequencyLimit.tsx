@@ -74,7 +74,7 @@ const App: React.FC = () => {
   }
   return (
     <div className="form-box">
-      <div className="form-header">limit tx counts</div>
+      <div className="form-header">transfer frequency</div>
       <Form
         name="basic"
         form={form}

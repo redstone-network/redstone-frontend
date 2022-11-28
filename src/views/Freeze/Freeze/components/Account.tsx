@@ -33,7 +33,7 @@ const App: React.FC = () => {
   }
   return (
     <div className="form-box">
-      <div className="form-header">freeze account</div>
+      <div className="form-header">freeze account config</div>
       <Form
         name="basic"
         labelCol={{ span: 4 }}

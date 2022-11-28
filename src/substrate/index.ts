@@ -113,14 +113,16 @@ async function setAmountLimit(time: number, amount: number): Promise<boolean> {
   }
   const Alice = getUser(userAccount)
   return new Promise((resolve) => {
-    api.tx.defenseModule.setTransferLimit({ amountLimit: amount }).signAndSend(Alice, ({ events = [], status }) => {
-      if (status.isFinalized) {
-        resolve(true)
-        events.forEach(({ phase, event: { data, method, section } }) => {
-          console.log(`${phase.toString()} : ${section}.${method} ${data.toString()}`)
-        })
-      }
-    })
+    api.tx.defenseModule
+      .setTransferLimitation({ amountLimit: amount })
+      .signAndSend(Alice, ({ events = [], status }) => {
+        if (status.isFinalized) {
+          resolve(true)
+          events.forEach(({ phase, event: { data, method, section } }) => {
+            console.log(`${phase.toString()} : ${section}.${method} ${data.toString()}`)
+          })
+        }
+      })
   })
 }
 // set the timesLimit
@@ -132,7 +134,7 @@ async function setFrequencyLimit(amount: number, total: number): Promise<boolean
   const Alice = getUser(userAccount)
   return new Promise((resolve) => {
     api.tx.defenseModule
-      .setTransferLimit({ FrequencyLimit: [amount, total] })
+      .setTransferLimitation({ FrequencyLimit: [amount, total] })
       .signAndSend(Alice, ({ events = [], status }) => {
         if (status.isFinalized) {
           console.log(status)
@@ -151,7 +153,7 @@ async function getLimitInfo(index: number) {
     return Promise.reject('no account')
   }
   const Alice = getUser(userAccount)
-  const res = await api.query.defenseModule.transferLimitOwner(Alice.address, index)
+  const res = await api.query.defenseModule.transferLimitationOwner(Alice.address, index)
   return res.toHuman()
 }
 // setFreezeTime
@@ -162,7 +164,7 @@ async function setFreezeTime(time: number): Promise<boolean> {
   }
   const Alice = getUser(userAccount)
   return new Promise((resolve) => {
-    api.tx.defenseModule.setRiskManagement({ TimeFreeze: time }).signAndSend(Alice, ({ events = [], status }) => {
+    api.tx.defenseModule.setFreezeConfiguration({ TimeFreeze: time }).signAndSend(Alice, ({ events = [], status }) => {
       if (status.isFinalized) {
         console.log(status)
         resolve(true)
@@ -200,7 +202,7 @@ async function getFreezeInfo(index: number) {
     return Promise.reject('no account')
   }
   const Alice = getUser(userAccount)
-  const res = await api.query.defenseModule.transferLimitOwner(Alice.address, index)
+  const res = await api.query.defenseModule.freezeConfigurationOwner(Alice.address, index)
   return res.toHuman()
 }
 // createCaptureConfig

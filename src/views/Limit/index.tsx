@@ -7,8 +7,8 @@ import Config from './Config'
 
 const Limit: React.FC = () => {
   const items = [
-    { label: 'LIMIT CONNECT CONFIG', key: '1', children: <Account /> },
-    { label: 'LIMIT CONFIG', key: '2', children: <Config /> },
+    { label: 'Notification Method Config', key: '1', children: <Account /> },
+    { label: 'Transfer Limit Config', key: '2', children: <Config /> },
   ]
   return (
     <div className="limit-container">

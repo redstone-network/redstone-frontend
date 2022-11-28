@@ -80,7 +80,7 @@ const App: React.FC = () => {
 
   return (
     <div className="form-box">
-      <div className="form-header">limit amount per tx</div>
+      <div className="form-header">max amount per tx</div>
       <Form
         name="basic"
         form={form}
