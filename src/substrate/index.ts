@@ -183,7 +183,7 @@ async function AccountFreeze(frozen: boolean): Promise<boolean> {
   }
   const Alice = getUser(userAccount)
   return new Promise((resolve) => {
-    api.tx.defenseModule.setRiskManagement({ accountFreeze: frozen }).signAndSend(Alice, ({ events = [], status }) => {
+    api.tx.defenseModule.freezeAccount(frozen).signAndSend(Alice, ({ events = [], status }) => {
       if (status.isFinalized) {
         resolve(true)
         events.forEach(({ phase, event: { data, method, section } }) => {
