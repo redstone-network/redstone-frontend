@@ -1,23 +1,18 @@
-import { Button, Form, message, Select } from 'antd'
+import { Button, Form, message } from 'antd'
 import React, { useState } from 'react'
-import { setFreezeAccount } from '@/substrate'
-const { Option } = Select
+import { AccountFreeze } from '@/substrate'
 
 const App: React.FC = () => {
-  const freeText = 'Submit'
+  const freeText = 'freeze account directly'
   const [btnText, setBtnText] = useState(freeText)
   const [disabled, setDisabled] = useState(false)
-  const [form] = Form.useForm()
 
-  form.setFieldsValue({
-    freeze: true,
-  })
   const onFinish = async (values: any) => {
     try {
       const { freeze } = values
       setDisabled(true)
       setBtnText('Loading...')
-      const setRes = await setFreezeAccount(freeze)
+      const setRes = await AccountFreeze(freeze)
       if (setRes) {
         setBtnText(freeText)
         setDisabled(false)
@@ -37,7 +32,7 @@ const App: React.FC = () => {
   }
   return (
     <div className="form-box">
-      <div className="form-header">freeze account config</div>
+      <div className="form-header">freeze account now</div>
       <Form
         name="basic"
         labelCol={{ span: 4 }}
@@ -47,13 +42,7 @@ const App: React.FC = () => {
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
-        form={form}
       >
-        <Form.Item name="freeze" label="freeze account" rules={[{ required: true, message: 'Please select !' }]}>
-          <Select style={{ width: '80%' }} placeholder="Please select" allowClear>
-            <Option value={true}>freeze</Option>
-          </Select>
-        </Form.Item>
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
           <Button type="primary" htmlType="submit">
             {btnText}

@@ -175,6 +175,25 @@ async function setFreezeTime(time: number): Promise<boolean> {
     })
   })
 }
+// setFreezeAccount
+async function setFreezeAccount(free: boolean): Promise<boolean> {
+  const userAccount = store.getState().account.value
+  if (!userAccount) {
+    return Promise.reject('no account')
+  }
+  const Alice = getUser(userAccount)
+  return new Promise((resolve) => {
+    api.tx.defenseModule.setRiskManagement({ AccountFreeze: free }).signAndSend(Alice, ({ events = [], status }) => {
+      if (status.isFinalized) {
+        console.log(status)
+        resolve(true)
+        events.forEach(({ phase, event: { data, method, section } }) => {
+          console.log(`${phase.toString()} : ${section}.${method} ${data.toString()}`)
+        })
+      }
+    })
+  })
+}
 
 // freeze
 async function AccountFreeze(frozen: boolean): Promise<boolean> {
@@ -318,4 +337,5 @@ export {
   getUser,
   AccountFreeze,
   getFreezeInfo,
+  setFreezeAccount,
 }
